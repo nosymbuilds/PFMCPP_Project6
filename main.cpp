@@ -49,7 +49,7 @@ struct U
 {
     float x { 0 }, y { 0 };
     
-    float modify( float& val_ )
+    float modify( const float& val_ )
     {
         std::cout << "U's x value: " << x << std::endl;
         x = val_; 
@@ -64,7 +64,7 @@ struct U
 
 struct Modulation
 {
-    static float modulate( U& that, float& val )
+    static float modulate( U& that, const float& val )
     {
         std::cout << "U's x value: " << that.x << std::endl;
         that.x = val;
