@@ -66,7 +66,7 @@ struct Comparison
 {
     T* compare( T* a, T* b ) 
     {
-        if( a && b )
+        if( a != nullptr && b != nullptr )
         {
             if( a->value < b->value ) return a;
             if( a->value > b->value ) return b;
@@ -82,7 +82,7 @@ struct U
     
     float modify( float* val_ ) 
     {
-        if( val_ )
+        if( val_ != nullptr )
         {
             std::cout << "U's x value: " << x << std::endl;
             x = *val_; 
@@ -93,11 +93,9 @@ struct U
             std::cout << "U's y updated value: " << y << std::endl;
             return y * x;
         }
-        else
-        {
-            std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
-            return 0;
-        }
+
+        std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
+        return 0;
     }
 };
 
@@ -116,11 +114,9 @@ struct Modulation
             std::cout << "U's y updated value: " << that->y << std::endl; 
             return that->y * that->x;
         }
-        else
-        {
-            std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
-            return 0;
-        }  
+        
+        std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
+        return 0; 
     }
 };
         
@@ -146,7 +142,7 @@ int main()
     Comparison f;                                            
     auto* smaller = f.compare( &t1 , &t2 );                              
     
-    if( smaller )
+    if( smaller != nullptr )
         std::cout << "the smaller one is << " << smaller->name << std::endl;
     
     U u1;
