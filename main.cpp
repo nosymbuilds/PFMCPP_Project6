@@ -54,48 +54,25 @@ Purpose:  This project will show you the difference between member functions and
 
 #include <iostream>
 #include <string>
+
 struct T
 {
-    T(<#type name#> v, const char* <#variable name#>)   //1
-    //2
-    //3
+    T(int v, const char* n) : value(v), name(n) {}  
+    int value;                                     
+    std::string name;                              
 };
 
-struct <#structName1#>                                //4
+struct Comparison                                
 {
-    <#type name#> compare(<#type name#> a, <#type name#> b) //5
+    T* compare( T* a, T* b ) 
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
-        return nullptr;
-    }
-};
-
-struct U
-{
-    float <#name1#> { 0 }, <#name2#> { 0 };
-    <#returnType#> <#memberFunction#>(<#type name#>* <#updatedValue#>)      //12
-    {
-        
-    }
-};
-
-struct <#structname2#>
-{
-    static <#returntype#> <#staticFunctionA#>(U* that, <#type name#>* <#updatedValue#> )        //10
-    {
-        std::cout << "U's <#name1#> value: " << that-><#name1#> << std::endl;
-        that-><#name1#> = <#updatedValue#>;
-        std::cout << "U's <#name1#> updated value: " << that-><#name1#> << std::endl;
-        while( std::abs(that-><#name2#> - that-><#name1#>) > 0.001f )
+        if( a && b )
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
-            that-><#name2#> += ;
+            if( a->value < b->value ) return a;
+            if( a->value > b->value ) return b;
         }
-        std::cout << "U's <#name2#> updated value: " << that-><#name2#> << std::endl;
-        return that-><#name2#> * that-><#name1#>;
+
+        return nullptr;
     }
 };
         
@@ -113,19 +90,69 @@ struct <#structname2#>
  Wait for my code review.
  */
 
+struct U
+{
+    float x { 0 }, y { 0 };
+    
+    float modify( float* val_ ) 
+    {
+        if( val_ )
+        {
+            std::cout << "U's x value: " << x << std::endl;
+            x = *val_; 
+            std::cout << "U's x updated value: " << x << std::endl;
+            while( std::abs(y - x) > 0.001f )   
+                y += 0.1f ;
+            
+            std::cout << "U's y updated value: " << y << std::endl;
+            return y * x;
+        }
+        else
+        {
+            std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
+            return 0;
+        }
+    }
+};
+
+struct Modulation
+{
+    static float modulate( U* that, float* val )
+    {
+        if( that != nullptr && val != nullptr )
+        {
+            std::cout << "U's x value: " << that->x << std::endl;
+            that->x = *val;
+            std::cout << "U's x updated value: " << that->x << std::endl;
+            while( std::abs(that->y - that->x) > 0.001f )   
+                that->y += 0.1f ;
+
+            std::cout << "U's y updated value: " << that->y << std::endl; 
+            return that->y * that->x;
+        }
+        else
+        {
+            std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
+            return 0;
+        }  
+    }
+};
+
 int main()
 {
-    T <#name1#>( , );                                             //6
-    T <#name2#>( , );                                             //6
+    T t1( 9, "Nine" );                                             
+    T t2( 7, "Seven" );                                             
     
-    <#structName1#> f;                                            //7
-    auto* smaller = f.compare( , );                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    Comparison f;                                            
+    auto* smaller = f.compare( &t1 , &t2 );                              
     
-    U <#name3#>;
+    if( smaller )
+        std::cout << "the smaller one is << " << smaller->name << std::endl;
+    
+    U u1;
     float updatedValue = 5.f;
-    std::cout << "[static func] <#name3#>'s multiplied values: " << <#structname2#>::<#staticFunctionA#>( , ) << std::endl;                  //11
-    
-    U <#name4#>;
-    std::cout << "[member func] <#name4#>'s multiplied values: " << <#name4#>.<#memberFunction#>( &updatedValue ) << std::endl;
+    std::cout << "[static func] u1's multiplied values: " << Modulation::modulate( &u1 , &updatedValue ) << std::endl;   
+            
+    U u2;
+    std::cout << "[member func] u2's multiplied values: " << u2.modify( &updatedValue ) << std::endl;
 }
