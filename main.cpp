@@ -24,7 +24,6 @@ Create a branch named Part2
  
  */
 
-
 #include <iostream>
 #include <string>
 
@@ -37,13 +36,10 @@ struct T
 
 struct Comparison                                
 {
-    T* compare( T* a, T* b ) 
+    T* compare( T& a , T& b ) 
     {
-        if( a != nullptr && b != nullptr )
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
 
         return nullptr;
     }
@@ -53,46 +49,34 @@ struct U
 {
     float x { 0 }, y { 0 };
     
-    float modify( float* val_ ) 
+    float modify( const float& val_ )
     {
-        if( val_ != nullptr )
-        {
-            std::cout << "U's x value: " << x << std::endl;
-            x = *val_; 
-            std::cout << "U's x updated value: " << x << std::endl;
-            while( std::abs(y - x) > 0.001f )   
-                y += 0.1f ;
-            
-            std::cout << "U's y updated value: " << y << std::endl;
-            return y * x;
-        }
-
-        std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
-        return 0;
+        std::cout << "U's x value: " << x << std::endl;
+        x = val_; 
+        std::cout << "U's x updated value: " << x << std::endl;
+        while( std::abs(y - x) > 0.001f )   
+            y += 0.1f ;
+        
+        std::cout << "U's y updated value: " << y << std::endl;
+        return y * x;
     }
 };
 
 struct Modulation
 {
-    static float modulate( U* that, float* val )
+    static float modulate( U& that, const float& val )
     {
-        if( that != nullptr && val != nullptr )
-        {
-            std::cout << "U's x value: " << that->x << std::endl;
-            that->x = *val;
-            std::cout << "U's x updated value: " << that->x << std::endl;
-            while( std::abs(that->y - that->x) > 0.001f )   
-                that->y += 0.1f ;
+        std::cout << "U's x value: " << that.x << std::endl;
+        that.x = val;
+        std::cout << "U's x updated value: " << that.x << std::endl;
+        while( std::abs(that.y - that.x) > 0.001f )   
+            that.y += 0.1f ;
 
-            std::cout << "U's y updated value: " << that->y << std::endl; 
-            return that->y * that->x;
-        }
-        
-        std::cout << "WARNING! nullptr detected. Task aborted!" << std::endl;
-        return 0; 
+        std::cout << "U's y updated value: " << that.y << std::endl; 
+        return that.y * that.x;
     }
 };
-        
+
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
 
@@ -109,19 +93,21 @@ struct Modulation
 
 int main()
 {
-    T t1( 9, "Nine" );                                             
-    T t2( 7, "Seven" );                                             
+    T t1( 5, "Five" );                                             
+    T t2( 9, "Nine" );                                             
     
     Comparison f;                                            
-    auto* smaller = f.compare( &t1 , &t2 );                              
+    auto* smaller = f.compare( t1 , t2 );                           
     
     if( smaller != nullptr )
         std::cout << "the smaller one is << " << smaller->name << std::endl;
-    
+    else
+        std::cout << "a nullptr was returned as t1 and t2 values are equal " << std::endl;
+       
     U u1;
     float updatedValue = 5.f;
-    std::cout << "[static func] u1's multiplied values: " << Modulation::modulate( &u1 , &updatedValue ) << std::endl;   
+    std::cout << "[static func] u1's multiplied values: " << Modulation::modulate( u1 , updatedValue ) << std::endl;   
             
     U u2;
-    std::cout << "[member func] u2's multiplied values: " << u2.modify( &updatedValue ) << std::endl;
+    std::cout << "[member func] u2's multiplied values: " << u2.modify( updatedValue ) << std::endl;
 }
