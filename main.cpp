@@ -93,8 +93,8 @@ struct Modulation
 
 int main()
 {
-    T t1( 9, "Nine" );                                             
-    T t2( 7, "Seven" );                                             
+    T t1( 5, "Five" );                                             
+    T t2( 9, "Nine" );                                             
     
     Comparison f;                                            
     auto* smaller = f.compare( t1 , t2 );                           
@@ -102,7 +102,7 @@ int main()
     if( smaller != nullptr )
         std::cout << "the smaller one is << " << smaller->name << std::endl;
     else
-        std::cout << "a nullptr was passed to compare() resulting in compare() returning nullptr" << std::endl;
+        std::cout << "a nullptr was returned as t1 and t2 values are equal " << std::endl;
        
     U u1;
     float updatedValue = 5.f;
